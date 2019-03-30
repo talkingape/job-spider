@@ -8,7 +8,7 @@ import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,15 +36,18 @@ public class HttpUtil {
                 getMethod.addRequestHeader(header);
             }
         }
-        String responseBodyAsString;
+        StringBuffer responseBody = new StringBuffer();
         try {
             HTTP_CLIENT.executeMethod(getMethod);
-            responseBodyAsString = getMethod.getResponseBodyAsString();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getMethod.getResponseBodyAsStream()));
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null){
+                responseBody.append(line);
+            }
         } catch (IOException e) {
             log.error("获取URL-{}内容失败", url, e);
-            responseBodyAsString = null;
         }
-        return responseBodyAsString;
+        return responseBody.toString();
     }
 
     public static List<Header> wrapHeader(Map<String, String> headerMap){
