@@ -28,6 +28,10 @@ public class HttpUtil {
         HTTP_CLIENT = new HttpClient(connectionManager);
     }
 
+    public static String getResponse(String url){
+        return getResponse(url, null);
+    }
+
     public static String getResponse(String url, List<Header> headerList){
         HttpMethod getMethod = new GetMethod(url);
         if (CollectionUtils.isNotEmpty(headerList)){

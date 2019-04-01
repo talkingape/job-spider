@@ -13,9 +13,8 @@ import java.util.Iterator;
  * Email: wanggang1@vipkid.com.cn
  */
 @Slf4j
-public class LagouParser implements SpiderParser<LagouEntity> {
+public class LagouParser {
 
-    @Override
     public LagouEntity parse(String response) {
         JSONObject responseJson = (JSONObject) JSON.parse(response);
         //js['content']['data']['page']['result']
