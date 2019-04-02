@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by WangGang on 2019-03-30.
@@ -36,24 +39,28 @@ public class Job51Parser {
      */
     public Job51Entity parseDetail(String url, String response){
         Document dom = Jsoup.parse(response);
-        String address = dom.select(".jt em text").first().val() + dom.select(".rec span text").first().val();
-        String salary = dom.select(".jp text").first().val();
-        String createTime = dom.select(".jt span text").first().val();
-        String body = dom.select(".ain article").first().val();
-        String companyName = dom.select(".rec .c_444 text").first().val();
-        String positionId = dom.select(".jp text").first().val();
-        String positionName = dom.select(".jt p text").first().val();
-        String workYear = dom.select(".jd .s_n text").first().val();
-        String educational = dom.select(".jd .s_x text").first().val();
+        String address = Optional.ofNullable(dom.select(".jt em").first()).map(Element::html).orElse("未知")
+                + " - "
+                + Optional.ofNullable(dom.select(".rec span").first()).map(Element::html).orElse("未知") ;
+        String salary = Optional.ofNullable(dom.select(".jp").first()).map(Element::html).orElse("未知");
+        String postDate = Optional.ofNullable(dom.select(".jt span").first()).map(Element::html).orElse("未知");
+        String body = Optional.ofNullable(dom.select(".ain article").first()).map(Element::val).orElse("未知");
+        String companyName = Optional.ofNullable(dom.select(".rec .c_444").first()).map(Element::html).orElse("未知");
+        //String positionId = Optional.ofNullable(dom.select(".jp").first()).map(Element::html).orElse("未知");
+        String positionName = Optional.ofNullable(dom.select(".jt p").first()).map(Element::html).orElse("未知");
+        String workYear = Optional.ofNullable(dom.select(".jd .s_n").first()).map(Element::html).orElse("未知");
+        String educational = Optional.ofNullable(dom.select(".jd .s_x").first()).map(Element::html).orElse("未知");
         Job51Entity job51Entity = Job51Entity.builder()
                 .address(address)
                 .salary(salary)
                 .body(body)
                 .companyName(companyName)
-                .positionId(positionId)
+                //.positionId(positionId)
                 .positionName(positionName)
-                .workYear(Integer.parseInt(workYear))
+                .workYear(workYear)
                 .educational(educational)
+                .postDate(postDate)
+                .createTime(new Date())
                 .build();
         return job51Entity;
     }

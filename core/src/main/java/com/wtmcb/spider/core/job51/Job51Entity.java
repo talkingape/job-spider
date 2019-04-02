@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * Created by WangGang on 2019-03-30.
  * Email: wanggang1@vipkid.com.cn
@@ -27,7 +29,11 @@ public class Job51Entity {
 
     private String salary;
 
-    private Integer workYear;
+    private String workYear;
 
     private String educational;
+
+    private String postDate;
+
+    private Date createTime;
 }
